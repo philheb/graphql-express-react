@@ -2,12 +2,15 @@ const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const graphqlHttp = require("express-graphql");
+const cors = require("cors");
 
 const graphQlSchema = require("./graphql/schema/index");
 const graphQlResolver = require("./graphql/resolvers/index");
 const isAuth = require("./middleware/isAuth");
 
 const app = express();
+
+app.use(cors({ origin: "http://localhost:3000" }));
 
 app.use(bodyParser.json());
 
@@ -22,7 +25,7 @@ app.use(
   })
 );
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 mongoose
   .connect(

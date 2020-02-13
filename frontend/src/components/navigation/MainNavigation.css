@@ -1,0 +1,69 @@
+.main-navigation {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 3.5rem;
+  background: rgb(40, 40, 40);
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.main-navigation__logo h1,
+.main-navigation__logo a {
+  margin: 0;
+  padding: 0;
+  font-size: 2rem;
+  text-decoration: none;
+  color: white;
+  /* font-family: "Luckiest Guy"; */
+}
+
+.main-navigation__items {
+  margin: 0;
+}
+
+.main-navigation__items ul {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.main-navigation__items li {
+  margin-left: 1rem;
+}
+
+.main-navigation__items a {
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+}
+
+.main-navigation__items a:hover,
+.main-navigation__items a:active,
+.main-navigation__items a.active,
+.main-navigation__logo h1:hover {
+  color: rgb(250, 250, 152);
+}
+
+/* .main-navigation__button {
+  background-color: rgb(250, 250, 152);
+  padding: 5px 15px;
+  border-radius: 20px;
+} */
+.main-navigation__button:hover {
+  background-color: rgb(250, 250, 75);
+  padding: 5px 15px;
+  border-radius: 20px;
+}
+
+.main-navigation__button a,
+.main-navigation__button a:hover,
+.main-navigation__button a:active,
+.main-navigation__button a.active {
+  color: rgb(40, 40, 40);
+}
