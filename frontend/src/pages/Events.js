@@ -1,12 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 
+import "./Events.css";
+
 import Modal from "../components/modal/Modal";
+import EventItem from "../components/events/EventItem";
 
 const Events = () => {
   const { token } = useContext(AuthContext);
 
   const [showModal, setShowModal] = useState(false);
+
+  const [events, setEvents] = useState([]);
 
   const [values, setValues] = useState({
     title: "",
@@ -16,6 +21,48 @@ const Events = () => {
   });
 
   const { title, description, price, date } = values;
+
+  useEffect(() => {
+    loadEvents();
+  }, []);
+
+  const loadEvents = () => {
+    const requestBody = {
+      query: `
+        query {
+          events {
+            _id
+            title
+            description
+            price
+            date
+            creator {
+              _id
+              email
+            }
+          }
+        }
+      `
+    };
+
+    fetch("http://localhost:8000/graphql", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        setEvents(resData.data.events);
+      })
+      .catch(err => console.log(err));
+  };
 
   const handleClickCreateEvent = () => {
     setShowModal(true);
@@ -56,11 +103,7 @@ const Events = () => {
       })
       .then(resData => {
         console.log(resData);
-        if (resData.errors) {
-          resData.errors.map(error => {
-            console.log(error.message);
-          });
-        }
+        loadEvents();
       })
       .catch(err => console.log(err));
     setShowModal(false);
@@ -154,10 +197,14 @@ const Events = () => {
     }
   };
 
+  const showEvents = () =>
+    events.map(event => <EventItem key={event._id} event={event} />);
+
   return (
     <main style={{ marginTop: "120px" }}>
       {showModal ? modal() : null}
       {showButton()}
+      <ul className='events__list'>{showEvents()}</ul>
     </main>
   );
 };
