@@ -201,10 +201,10 @@ const Events = () => {
       return (
         <section className='d-flex justify-content-center'>
           <button
-            className='btn btn-lg btn-primary'
+            className='btn btn-lg btn-warning'
             onClick={handleClickCreateEvent}
           >
-            Create Event
+            Create New Event
           </button>
         </section>
       );
@@ -217,7 +217,7 @@ const Events = () => {
     ));
 
   return (
-    <main style={{ marginTop: "120px" }}>
+    <main style={{ marginTop: "10rem" }}>
       {showModal ? modal() : null}
       {showButton()}
       <ul className='events__list'>

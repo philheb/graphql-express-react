@@ -1,0 +1,15 @@
+.bookings__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid #555;
+  border-radius: 10px;
+}
+
+.bookings__item-data {
+}
+
+.bookings__item-actions {
+}

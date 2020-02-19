@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import BookingItem from "../components/bookings/BookingItem";
+
+import "./Bookings.css";
 
 const Bookings = () => {
   const { token } = useContext(AuthContext);
@@ -56,8 +59,74 @@ const Bookings = () => {
     return () => (isSubscribed = false);
   }, [token]);
 
+  const showBookings = () => (
+    <ul className='bookings__list'>
+      {bookings.map(booking => {
+        return (
+          <BookingItem
+            key={booking._id}
+            booking={booking}
+            cancelBooking={handleCancelBooking}
+          />
+        );
+      })}
+    </ul>
+  );
+
+  const handleCancelBooking = bookingId => {
+    setIsLoading(true);
+    // const requestBody = {
+    //   query: `
+    //     mutation {
+    //       cancelBooking(bookingId: "${bookingId}") {
+    //         _id
+    //         title
+    //       }
+    //     }
+    //   `
+    // };
+    const requestBody = {
+      query: `
+        mutation CancelBooking($id: ID!) {
+          cancelBooking(bookingId: $id) {
+            _id
+            title
+          }
+        }
+      `,
+      variables: { id: bookingId }
+    };
+
+    fetch("http://localhost:8000/graphql", {
+      method: "POST",
+      body: JSON.stringify(requestBody),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    })
+      .then(res => {
+        if (res.status !== 200 && res.status !== 201) {
+          throw new Error("Failed!");
+        }
+        return res.json();
+      })
+      .then(resData => {
+        setBookings(
+          bookings.filter(booking => {
+            return booking._id !== bookingId;
+          })
+        );
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.log(err);
+        setIsLoading(false);
+      });
+  };
+
   return (
-    <div>
+    <main className='bookings'>
       {isLoading ? (
         <div className='text-center'>
           <div
@@ -68,15 +137,9 @@ const Bookings = () => {
           </div>
         </div>
       ) : (
-        <ul>
-          {bookings.map(booking => (
-            <div key={booking._id}>
-              <p>{booking.event.title}</p>
-            </div>
-          ))}
-        </ul>
+        showBookings()
       )}
-    </div>
+    </main>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 import { AuthContext } from "../../context/AuthContext";
 
@@ -24,14 +24,10 @@ const MainNavigation = () => {
               <li>
                 <NavLink to='/bookings'>Bookings</NavLink>
               </li>
-              <li>
-                <button
-                  className='main-navigation__button bttn'
-                  onClick={() => logout()}
-                >
-                  Log Out
-                </button>
-              </li>
+
+              <button className='btn btn-warning' onClick={() => logout()}>
+                Log Out
+              </button>
             </>
           )}
           {!token && (
@@ -39,9 +35,14 @@ const MainNavigation = () => {
               <li>
                 <NavLink to='/login'>Log In</NavLink>
               </li>
-              <li className='main-navigation__button bttn'>
+              <button className='btn btn-warning'>
+                <Link className='text-dark' to='/signup'>
+                  Sign Up
+                </Link>
+              </button>
+              {/* <li className='main-navigation__button bttn'>
                 <NavLink to='/signup'>Sign Up</NavLink>
-              </li>
+              </li> */}
             </>
           )}
         </ul>
