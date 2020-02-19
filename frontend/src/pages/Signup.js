@@ -10,7 +10,8 @@ const Auth = () => {
     showForm: true
   });
 
-  const { email, password, error, loading, message, showForm } = values;
+  // const { email, password, error, loading, message, showForm } = values;
+  const { email, password } = values;
 
   const handleChange = input => e => {
     setValues({ ...values, error: false, [input]: e.target.value });

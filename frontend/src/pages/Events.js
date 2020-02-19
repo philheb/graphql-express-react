@@ -7,11 +7,12 @@ import Modal from "../components/modal/Modal";
 import EventItem from "../components/events/EventItem";
 
 const Events = () => {
-  const { token } = useContext(AuthContext);
+  const { token, userId } = useContext(AuthContext);
 
   const [showModal, setShowModal] = useState(false);
 
   const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [values, setValues] = useState({
     title: "",
@@ -23,10 +24,8 @@ const Events = () => {
   const { title, description, price, date } = values;
 
   useEffect(() => {
-    loadEvents();
-  }, []);
-
-  const loadEvents = () => {
+    let isSubscribed = true;
+    setIsLoading(true);
     const requestBody = {
       query: `
         query {
@@ -59,16 +58,23 @@ const Events = () => {
         return res.json();
       })
       .then(resData => {
-        setEvents(resData.data.events);
+        if (isSubscribed) {
+          setEvents(resData.data.events);
+          setIsLoading(false);
+        } else {
+          return null;
+        }
       })
       .catch(err => console.log(err));
-  };
+    return () => (isSubscribed = false);
+  }, []);
 
   const handleClickCreateEvent = () => {
     setShowModal(true);
   };
 
   const handleClickConfirm = () => {
+    setIsLoading(true);
     const requestBody = {
       query: `
         mutation {
@@ -78,10 +84,6 @@ const Events = () => {
             description
             price
             date
-            creator {
-              _id
-              email
-            }
           }
         }
       `
@@ -102,8 +104,20 @@ const Events = () => {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
-        loadEvents();
+        setEvents(events => [
+          ...events,
+          {
+            _id: resData.data.createEvent._id,
+            title: resData.data.createEvent.title,
+            description: resData.data.createEvent.description,
+            price: resData.data.createEvent.price,
+            date: resData.data.createEvent.date,
+            creator: {
+              _id: userId
+            }
+          }
+        ]);
+        setIsLoading(false);
       })
       .catch(err => console.log(err));
     setShowModal(false);
@@ -198,13 +212,28 @@ const Events = () => {
   };
 
   const showEvents = () =>
-    events.map(event => <EventItem key={event._id} event={event} />);
+    events.map(event => (
+      <EventItem key={event._id} event={event} authUserId={userId} />
+    ));
 
   return (
     <main style={{ marginTop: "120px" }}>
       {showModal ? modal() : null}
       {showButton()}
-      <ul className='events__list'>{showEvents()}</ul>
+      <ul className='events__list'>
+        {isLoading ? (
+          <div className='text-center'>
+            <div
+              className='spinner-border text-light'
+              style={{ width: "5rem", height: "5rem" }}
+            >
+              <span className='sr-only'>Loading...</span>
+            </div>
+          </div>
+        ) : (
+          showEvents()
+        )}
+      </ul>
     </main>
   );
 };

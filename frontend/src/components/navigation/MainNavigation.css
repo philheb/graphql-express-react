@@ -50,15 +50,18 @@
   color: rgb(250, 250, 152);
 }
 
-/* .main-navigation__button {
+.main-navigation__button {
   background-color: rgb(250, 250, 152);
   padding: 5px 15px;
   border-radius: 20px;
-} */
+  border: none;
+}
+
 .main-navigation__button:hover {
   background-color: rgb(250, 250, 75);
   padding: 5px 15px;
   border-radius: 20px;
+
 }
 
 .main-navigation__button a,

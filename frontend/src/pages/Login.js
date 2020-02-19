@@ -2,17 +2,18 @@ import React, { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const Auth = () => {
-  const { userId, login, logout } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
   const [values, setValues] = useState({
-    email: "",
-    password: "",
+    email: "test@test.com",
+    password: "123456",
     error: "",
     loading: false,
     message: "",
     showForm: true
   });
 
-  const { email, password, error, loading, message, showForm } = values;
+  // const { email, password, error, loading, message, showForm } = values;
+  const { email, password } = values;
 
   const handleChange = input => e => {
     setValues({ ...values, error: false, [input]: e.target.value });
@@ -47,7 +48,6 @@ const Auth = () => {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
         login(
           resData.data.login.token,
           resData.data.login.userId,

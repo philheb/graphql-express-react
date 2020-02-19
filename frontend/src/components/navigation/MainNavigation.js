@@ -25,7 +25,12 @@ const MainNavigation = () => {
                 <NavLink to='/bookings'>Bookings</NavLink>
               </li>
               <li>
-                <a onClick={() => logout()}>Log Out</a>
+                <button
+                  className='main-navigation__button bttn'
+                  onClick={() => logout()}
+                >
+                  Log Out
+                </button>
               </li>
             </>
           )}

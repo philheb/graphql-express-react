@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 import "./Modal.css";
 
@@ -21,6 +22,18 @@ const Modal = props => {
             <button className='btn btn-primary ml-2' onClick={props.onConfirm}>
               Confirm
             </button>
+          )}
+          {props.confirmText && props.confirmText === "Book" && (
+            <button className='btn btn-primary ml-2' onClick={props.onBook}>
+              {props.confirmText}
+            </button>
+          )}
+          {props.confirmText && props.confirmText === "Log in to Book" && (
+            <Link to='/login'>
+              <button className='btn btn-primary ml-2'>
+                {props.confirmText}
+              </button>
+            </Link>
           )}
         </section>
       </div>
