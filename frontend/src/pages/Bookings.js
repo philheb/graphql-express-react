@@ -3,12 +3,14 @@ import { AuthContext } from "../context/AuthContext";
 import BookingItem from "../components/bookings/BookingItem";
 
 import "./Bookings.css";
+import BookingChart from "../components/bookings/BookingChart";
 
 const Bookings = () => {
   const { token } = useContext(AuthContext);
 
   const [bookings, setBookings] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isChart, setIsChart] = useState(false);
 
   useEffect(() => {
     let isSubscribed = true;
@@ -59,32 +61,8 @@ const Bookings = () => {
     return () => (isSubscribed = false);
   }, [token]);
 
-  const showBookings = () => (
-    <ul className='bookings__list'>
-      {bookings.map(booking => {
-        return (
-          <BookingItem
-            key={booking._id}
-            booking={booking}
-            cancelBooking={handleCancelBooking}
-          />
-        );
-      })}
-    </ul>
-  );
-
   const handleCancelBooking = bookingId => {
     setIsLoading(true);
-    // const requestBody = {
-    //   query: `
-    //     mutation {
-    //       cancelBooking(bookingId: "${bookingId}") {
-    //         _id
-    //         title
-    //       }
-    //     }
-    //   `
-    // };
     const requestBody = {
       query: `
         mutation CancelBooking($id: ID!) {
@@ -125,21 +103,58 @@ const Bookings = () => {
       });
   };
 
+  const showBookings = () => (
+    <ul className='bookings__list'>
+      {bookings.map(booking => {
+        return (
+          <BookingItem
+            key={booking._id}
+            booking={booking}
+            cancelBooking={handleCancelBooking}
+          />
+        );
+      })}
+    </ul>
+  );
+
+  const showSpinner = () => (
+    <div className='text-center'>
+      <div
+        className='spinner-border text-light'
+        style={{ width: "5rem", height: "5rem" }}
+      >
+        <span className='sr-only'>Loading...</span>
+      </div>
+    </div>
+  );
+
+  const showTabs = () => (
+    <div>
+      {/* <div className='btn-group btn-group-toggle d-flex justify-content-center'> */}
+      <div className='d-flex justify-content-center'>
+        <button
+          className={!isChart ? "btn btn-primary" : "btn btn-primary disabled"}
+          onClick={() => setIsChart(!isChart)}
+        >
+          Your Bookings
+        </button>
+        <button
+          className={
+            isChart ? "btn btn-primary ml-3" : "btn btn-primary ml-3 disabled"
+          }
+          onClick={() => setIsChart(!isChart)}
+        >
+          Bookings Chart
+        </button>
+      </div>
+      <div>
+        {isChart ? <BookingChart bookings={bookings} /> : showBookings()}
+      </div>
+    </div>
+  );
+
   return (
-    <main className='bookings'>
-      {isLoading ? (
-        <div className='text-center'>
-          <div
-            className='spinner-border text-light'
-            style={{ width: "5rem", height: "5rem" }}
-          >
-            <span className='sr-only'>Loading...</span>
-          </div>
-        </div>
-      ) : (
-        showBookings()
-      )}
-    </main>
+    <main className='bookings'>{isLoading ? showSpinner() : showTabs()}</main>
   );
 };
 

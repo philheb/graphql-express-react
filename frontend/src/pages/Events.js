@@ -77,8 +77,8 @@ const Events = () => {
     setIsLoading(true);
     const requestBody = {
       query: `
-        mutation {
-          createEvent(eventInput: {title: "${title}", description: "${description}", price: ${price}, date: "${date}"}) {
+        mutation CreateEvent($title: String!, $description: String!, $price: Float!, $date: String!) {
+          createEvent(eventInput: {title: $title, description: $description, price: $price, date: $date}) {
             _id
             title
             description
@@ -86,7 +86,13 @@ const Events = () => {
             date
           }
         }
-      `
+      `,
+      variables: {
+        title: title,
+        description: description,
+        price: parseFloat(price),
+        date: date
+      }
     };
 
     fetch("http://localhost:8000/graphql", {
@@ -117,6 +123,12 @@ const Events = () => {
             }
           }
         ]);
+        setValues({
+          title: "",
+          description: "",
+          price: "",
+          date: ""
+        });
         setIsLoading(false);
       })
       .catch(err => console.log(err));
@@ -168,8 +180,6 @@ const Events = () => {
           className='form-control'
           placeholder='Price'
           value={price}
-          min='1.00'
-          max='5.00'
           required
         />
       </div>

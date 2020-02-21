@@ -24,14 +24,15 @@ const Auth = () => {
 
     const requestBody = {
       query: `
-        query {
-          login(email: "${email}", password: "${password}") {
+        query Login($email: String!, $password: String!) {
+          login(email: $email, password: $password) {
             userId
             token
             tokenExpiration
           }
         }
-      `
+      `,
+      variables: { email: email, password: password }
     };
 
     fetch("http://localhost:8000/graphql", {

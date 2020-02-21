@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const Auth = () => {
+  const history = useHistory();
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -21,13 +23,14 @@ const Auth = () => {
     e.preventDefault();
     const requestBody = {
       query: `
-        mutation {
-          createUser(userInput: {email: "${email}", password: "${password}"}) {
+        mutation CreateUser($email: String!, $password: String!){
+          createUser(userInput: {email: $email, password: $password}) {
             _id
             email
           }
         }
-      `
+      `,
+      variables: { email: email, password: password }
     };
 
     fetch("http://localhost:8000/graphql", {
@@ -44,7 +47,7 @@ const Auth = () => {
         return res.json();
       })
       .then(resData => {
-        console.log(resData);
+        history.push("/login");
       })
       .catch(err => console.log(err));
   };
