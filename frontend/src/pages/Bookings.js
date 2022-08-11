@@ -133,19 +133,22 @@ const Bookings = () => {
       {/* <div className='btn-group btn-group-toggle d-flex justify-content-center'> */}
       <div className='d-flex justify-content-center'>
         <button
-          className={!isChart ? "btn btn-primary" : "btn btn-primary disabled"}
+            className={
+              isChart ? "btn btn-primary ml-3" : "btn btn-primary ml-3 disabled"
+            }
+            onClick={() => setIsChart(!isChart)}
+        >
+          Bookings Chart
+        </button>
+
+
+        <button
+          className={!isChart ? 'btn btn-primary' : 'btn btn-primary disabled'}
           onClick={() => setIsChart(!isChart)}
         >
           Your Bookings
         </button>
-        <button
-          className={
-            isChart ? "btn btn-primary ml-3" : "btn btn-primary ml-3 disabled"
-          }
-          onClick={() => setIsChart(!isChart)}
-        >
-          Bookings Chart
-        </button>
+
       </div>
       <div>
         {isChart ? <BookingChart bookings={bookings} /> : showBookings()}
