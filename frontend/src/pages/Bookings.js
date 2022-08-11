@@ -123,7 +123,7 @@ const Bookings = () => {
         className='spinner-border text-light'
         style={{ width: "5rem", height: "5rem" }}
       >
-        <span className='sr-only'>Loading...</span>
+        <span className='sr-only'>Loading</span>
       </div>
     </div>
   );
