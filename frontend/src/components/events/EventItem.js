@@ -74,6 +74,7 @@ const EventItem = ({ event, authUserId }) => {
           day: "numeric"
         })}
       </p>
+      <p>hi</p>
       <p>{event.description}</p>
       <p>${parseFloat(event.price).toFixed(2)}</p>
     </Modal>
